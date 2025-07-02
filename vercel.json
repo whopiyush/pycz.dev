@@ -33,7 +33,7 @@
     },
     {
       "source": "/(gh|github|git)(.*)",
-      "destination": "https://github.com/officialpiyush/$2",
+      "destination": "https://github.com/whopiyush/$2",
       "statusCode": 302
     }
   ]
