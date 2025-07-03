@@ -30,8 +30,8 @@ importers:
         specifier: ^0.28.5
         version: 0.28.6(@libsql/client@0.3.6)
       drizzle-zod:
-        specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.28.6(@libsql/client@0.3.6))(zod@3.25.67)
+        specifier: ^0.8.0
+        version: 0.8.2(drizzle-orm@0.28.6(@libsql/client@0.3.6))(zod@3.25.67)
       nanoid:
         specifier: ^4.0.2
         version: 4.0.2
@@ -1146,11 +1146,11 @@ packages:
       sqlite3:
         optional: true
 
-  drizzle-zod@0.5.1:
-    resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
+  drizzle-zod@0.8.2:
+    resolution: {integrity: sha512-9Do/16OjFFNrQDZgvMtxtDDwKWbFOxUAIwNPKX98SfxrP8H18vhN1BvNXbhelLcdgCE7GEaXDJqBjMExSkhpkA==}
     peerDependencies:
-      drizzle-orm: '>=0.23.13'
-      zod: '*'
+      drizzle-orm: '>=0.36.0'
+      zod: ^3.25.1
 
   dset@3.1.4:
     resolution: {integrity: sha512-2QF/g9/zTaPDc3BjNcVTGoBbXBgYfMTTceLaYcFJ/W9kggFUkhxD/hMEeuLKbugyef9SqAx8cpgwlIP/jinUTA==}
@@ -3748,7 +3748,7 @@ snapshots:
     optionalDependencies:
       '@libsql/client': 0.3.6
 
-  drizzle-zod@0.5.1(drizzle-orm@0.28.6(@libsql/client@0.3.6))(zod@3.25.67):
+  drizzle-zod@0.8.2(drizzle-orm@0.28.6(@libsql/client@0.3.6))(zod@3.25.67):
     dependencies:
       drizzle-orm: 0.28.6(@libsql/client@0.3.6)
       zod: 3.25.67
