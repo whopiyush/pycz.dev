@@ -31,5 +31,5 @@
     "drizzle-kit": "^0.19.13",
     "unocss": "^0.55.2"
   },
-  "packageManager": "pnpm@10.12.4"
+  "packageManager": "pnpm@10.13.1"
 }
