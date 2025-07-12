@@ -31,7 +31,7 @@ importers:
         version: 0.28.6(@libsql/client@0.3.6)
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.28.6(@libsql/client@0.3.6))(zod@3.25.67)
+        version: 0.5.1(drizzle-orm@0.28.6(@libsql/client@0.3.6))(zod@3.25.76)
       nanoid:
         specifier: ^4.0.2
         version: 4.0.2
@@ -40,7 +40,7 @@ importers:
         version: 10.26.9
       zod:
         specifier: ^3.22.2
-        version: 3.25.67
+        version: 3.25.76
     devDependencies:
       '@lagon/astro':
         specifier: ^0.3.0
@@ -2620,8 +2620,8 @@ packages:
     resolution: {integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==}
     engines: {node: '>=12.20'}
 
-  zod@3.25.67:
-    resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -3494,7 +3494,7 @@ snapshots:
       vitefu: 0.2.5(vite@4.5.14(@types/node@20.19.4))
       which-pm: 2.2.0
       yargs-parser: 21.1.1
-      zod: 3.25.67
+      zod: 3.25.76
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -3740,7 +3740,7 @@ snapshots:
       hanji: 0.0.5
       json-diff: 0.9.0
       minimatch: 7.4.6
-      zod: 3.25.67
+      zod: 3.25.76
     transitivePeerDependencies:
       - supports-color
 
@@ -3748,10 +3748,10 @@ snapshots:
     optionalDependencies:
       '@libsql/client': 0.3.6
 
-  drizzle-zod@0.5.1(drizzle-orm@0.28.6(@libsql/client@0.3.6))(zod@3.25.67):
+  drizzle-zod@0.5.1(drizzle-orm@0.28.6(@libsql/client@0.3.6))(zod@3.25.76):
     dependencies:
       drizzle-orm: 0.28.6(@libsql/client@0.3.6)
-      zod: 3.25.67
+      zod: 3.25.76
 
   dset@3.1.4: {}
 
@@ -5475,6 +5475,6 @@ snapshots:
 
   yocto-queue@1.2.1: {}
 
-  zod@3.25.67: {}
+  zod@3.25.76: {}
 
   zwitch@2.0.4: {}
