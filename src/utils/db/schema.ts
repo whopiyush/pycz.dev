@@ -9,6 +9,7 @@ export const links = sqliteTable(
     url: text("url").notNull(),
     description: text("description"),
     enabled: integer("enabled", { mode: "boolean" }).default(true).notNull(),
+    clicks: integer("clicks").default(0).notNull(),
     createdAt: integer("created_at", { mode: "timestamp" }).default(
       sql`(strftime('%s', 'now'))`,
     ),
