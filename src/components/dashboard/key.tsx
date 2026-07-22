@@ -15,26 +15,45 @@ export default function DashboardKey({ refreshState }: Props) {
   };
 
   return (
-    <form onSubmit={store} class="h-full flex flex-col items-center justify-center gap-6">
-      <div class="flex items-center border-2 border-zinc-800 rounded text-2xl lg:text-3xl">
-        <div class="bg-zinc-800 text-zinc-400 pl-4 pr-2 py-3 select-none">Key:</div>
-        <input
-          onInput={(e) => setKey(e.currentTarget.value)}
-          required
-          autofocus
-          placeholder="your dashboard key"
-          class="pl-2 pr-4 py-2 outline-none bg-zinc-900 text-zinc-300 placeholder-zinc-600"
-          type="password"
-        />
+    <div class="h-full flex flex-col items-center justify-center gap-8">
+      <div class="flex flex-col items-center gap-3 text-center">
+        <div class="text-5xl" i-pixelarticons-lock />
+        <h1 class="text-2xl lg:text-3xl font-black text-zinc-200">
+          Dashboard
+        </h1>
+        <p class="text-zinc-500 text-sm font-mono max-w-md">
+          Enter your dashboard key to manage short links. This key is set via
+          the <code class="text-zinc-400">DASHBOARD_KEY</code> environment
+          variable on the server.
+        </p>
       </div>
 
-      <button
-        type="submit"
-        class="px-4 py-2 rounded bg-lime-500/40 hover:bg-lime-500/50 disabled:cursor-not-allowed disabled:opacity-50"
-        disabled={!key.trim()}
+      <form
+        onSubmit={store}
+        class="flex flex-col items-center gap-4 w-full max-w-sm"
       >
-        Enter
-      </button>
-    </form>
+        <div class="flex items-center border-2 border-zinc-800 rounded overflow-hidden text-lg lg:text-xl w-full">
+          <div class="bg-zinc-800 text-zinc-400 px-4 py-3 select-none shrink-0">
+            Key
+          </div>
+          <input
+            onInput={(e) => setKey(e.currentTarget.value)}
+            required
+            autofocus
+            placeholder="••••••••"
+            class="w-full px-4 py-3 outline-none bg-zinc-900 text-zinc-300 placeholder-zinc-600"
+            type="password"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="px-8 py-2.5 rounded bg-lime-500/40 hover:bg-lime-500/50 disabled:cursor-not-allowed disabled:opacity-40 text-sm font-bold w-full"
+          disabled={!key.trim()}
+        >
+          Unlock
+        </button>
+      </form>
+    </div>
   );
 }
