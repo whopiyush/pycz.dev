@@ -265,8 +265,8 @@ export default function DashboardPage() {
                   <th class="py-2 pr-4 font-normal hidden md:table-cell">
                     URL
                   </th>
-                  <th class="py-2 pr-4 font-normal w-16 text-right">
-                    Clicks
+                  <th class="py-2 pr-4 font-normal w-28 text-right">
+                    Added
                   </th>
                   <th class="py-2 font-normal w-40 text-right">Actions</th>
                 </tr>
@@ -347,8 +347,10 @@ export default function DashboardPage() {
                       <td class="py-2 pr-4 text-zinc-500 hidden md:table-cell truncate max-w-[300px]">
                         {link.url}
                       </td>
-                      <td class="py-2 pr-4 text-zinc-500 text-right">
-                        {link.clicks}
+                      <td class="py-2 pr-4 text-zinc-500 text-right text-xs">
+                        {link.createdAt
+                          ? new Date(link.createdAt).toLocaleDateString()
+                          : "—"}
                       </td>
                       <td class="py-2 text-right">
                         <div class="flex gap-1 justify-end text-xs opacity-0 group-hover:opacity-100 transition-opacity">

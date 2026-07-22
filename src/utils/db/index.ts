@@ -2,7 +2,7 @@ import { and, eq, like, or } from "drizzle-orm";
 import db from "./connection";
 import { links, type Link, type NewLink } from "./schema";
 
-// Resolve a redirect: return URL for a given key, bump clicks
+// Resolve a redirect: return URL for a given key
 export async function resolveLink(key: string): Promise<string | null> {
   const rows = await db
     .select()
@@ -10,13 +10,7 @@ export async function resolveLink(key: string): Promise<string | null> {
     .where(and(eq(links.key, key), eq(links.enabled, true)))
     .limit(1);
 
-  const link = rows[0];
-  if (!link) return null;
-
-  // Fire-and-forget click counter
-  db.update(links).set({ clicks: link.clicks + 1 }).where(eq(links.id, link.id));
-
-  return link.url;
+  return rows[0]?.url ?? null;
 }
 
 // List all links (optionally filter by search term)
