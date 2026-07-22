@@ -1,13 +1,20 @@
 ---
 ---
 
-<div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-  <div class="flex gap-2 items-center uppercase">
+<div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center relative overflow-hidden">
+  <div class="flex gap-2 items-center uppercase z-10">
     <div class="h-8 w-8" i-pixelarticons-downasaur />
     <span class="font-black text-xl">Piyush</span>
   </div>
 
-  <div>
+  <!-- Walking cats -->
+  <div class="absolute inset-0 pointer-events-none flex items-center" aria-hidden="true">
+    <span class="text-lg animate-cat-walk-1">🐈</span>
+    <span class="text-lg animate-cat-walk-2">🐈‍⬛</span>
+    <span class="text-lg animate-cat-walk-3">🐈</span>
+  </div>
+
+  <div class="z-10">
     <a
       class="flex items-center justify-center gap-2 px-8 py-1 border-2 border-zinc-600 rounded hover:bg-zinc-800"
       href="https://github.com/officialpiyush"
@@ -18,3 +25,26 @@
     </a>
   </div>
 </div>
+
+<style>
+  .animate-cat-walk-1 {
+    position: absolute;
+    animation: catWalk 8s linear infinite;
+  }
+  .animate-cat-walk-2 {
+    position: absolute;
+    animation: catWalk 8s linear 3s infinite;
+  }
+  .animate-cat-walk-3 {
+    position: absolute;
+    animation: catWalk 8s linear 6s infinite;
+  }
+
+  @keyframes catWalk {
+    0%   { left: -2rem; transform: scaleX(1); }
+    49%  { left: calc(100% - 2rem); transform: scaleX(1); }
+    51%  { left: calc(100% - 2rem); transform: scaleX(-1); }
+    99%  { left: -2rem; transform: scaleX(-1); }
+    100% { left: -2rem; transform: scaleX(1); }
+  }
+</style>
