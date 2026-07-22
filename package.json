@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "@unocss/reset": "^66.7.5",
     "drizzle-kit": "^0.31.10",
     "unocss": "^66.7.5"
   },

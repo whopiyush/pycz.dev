@@ -6,6 +6,8 @@ import vercel from "@astrojs/vercel";
 
 export default defineConfig({
   output: "server",
-  integrations: [UnoCSS(), preact()],
+  integrations: [UnoCSS({
+    injectReset: true,
+  }), preact()],
   adapter: vercel(),
 });
