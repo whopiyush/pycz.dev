@@ -126,6 +126,9 @@ export default function DashboardPage() {
     }
   };
 
+  const fmtDate = (ts: Date | number | null) =>
+    ts ? new Date(ts).toLocaleDateString() : null;
+
   if (!isKeySet) {
     return (
       <DashboardKey
@@ -265,25 +268,17 @@ export default function DashboardPage() {
                   <th class="py-2 pr-4 font-normal hidden md:table-cell">
                     URL
                   </th>
-                  <th class="py-2 pr-4 font-normal w-28 text-right">
-                    Added
-                  </th>
                   <th class="py-2 font-normal w-40 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {links.map((link) =>
                   editing === link.id ? (
-                    <tr
-                      key={link.id}
-                      class="border-b border-zinc-800/50"
-                    >
+                    <tr key={link.id} class="border-b border-zinc-800/50">
                       <td class="py-2 pr-4 text-zinc-600" />
                       <td class="py-2 pr-4">
                         <input
-                          onInput={(e) =>
-                            setEditKey(e.currentTarget.value)
-                          }
+                          onInput={(e) => setEditKey(e.currentTarget.value)}
                           value={editKey}
                           class="w-full px-2 py-1 rounded border border-zinc-700 bg-zinc-800 text-zinc-300 outline-none focus:border-zinc-500 text-xs"
                           type="text"
@@ -291,15 +286,12 @@ export default function DashboardPage() {
                       </td>
                       <td class="py-2 pr-4 hidden md:table-cell">
                         <input
-                          onInput={(e) =>
-                            setEditUrl(e.currentTarget.value)
-                          }
+                          onInput={(e) => setEditUrl(e.currentTarget.value)}
                           value={editUrl}
                           class="w-full px-2 py-1 rounded border border-zinc-700 bg-zinc-800 text-zinc-300 outline-none focus:border-zinc-500 text-xs"
                           type="url"
                         />
                       </td>
-                      <td />
                       <td class="py-2 text-right">
                         <div class="flex gap-1 justify-end text-xs">
                           <button
@@ -323,22 +315,18 @@ export default function DashboardPage() {
                       class="border-b border-zinc-800/50 group hover:bg-zinc-800/30"
                     >
                       <td class="py-2 pr-4 text-zinc-600">
-                        {link.enabled ? (
-                          <span
-                            class="w-2 h-2 inline-block rounded-full bg-lime-500"
-                            title="Enabled"
-                          />
-                        ) : (
-                          <span
-                            class="w-2 h-2 inline-block rounded-full bg-red-500"
-                            title="Disabled"
-                          />
-                        )}
+                        <span
+                          class={`w-2 h-2 inline-block rounded-full ${
+                            link.enabled ? "bg-lime-500" : "bg-red-500"
+                          }`}
+                          title={link.enabled ? "Enabled" : "Disabled"}
+                        />
                       </td>
                       <td class="py-2 pr-4">
                         <a
                           href={`/${link.key}`}
                           target="_blank"
+                          title={fmtDate(link.createdAt) ? `Added ${fmtDate(link.createdAt)}` : undefined}
                           class="text-zinc-300 hover:text-lime-400 hover:underline truncate block max-w-[200px]"
                         >
                           /{link.key}
@@ -346,11 +334,6 @@ export default function DashboardPage() {
                       </td>
                       <td class="py-2 pr-4 text-zinc-500 hidden md:table-cell truncate max-w-[300px]">
                         {link.url}
-                      </td>
-                      <td class="py-2 pr-4 text-zinc-500 text-right text-xs">
-                        {link.createdAt
-                          ? new Date(link.createdAt).toLocaleDateString()
-                          : "—"}
                       </td>
                       <td class="py-2 text-right">
                         <div class="flex gap-1 justify-end text-xs opacity-0 group-hover:opacity-100 transition-opacity">
