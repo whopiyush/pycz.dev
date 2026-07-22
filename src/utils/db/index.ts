@@ -1,5 +1,5 @@
 import db from "./connection";
-import { links, LinksSchema } from "./schema";
+import { links, type LinksSchema } from "./schema";
 import { and, eq } from "drizzle-orm";
 
 export async function getLink(key: string) {
