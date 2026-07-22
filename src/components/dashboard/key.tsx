@@ -17,7 +17,12 @@ export default function DashboardKey({ refreshState }: Props) {
   return (
     <div class="h-full flex flex-col items-center justify-center gap-8">
       <div class="flex flex-col items-center gap-3 text-center">
-        <div class="text-5xl" i-pixelarticons-lock />
+        <img
+          src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTRvdTBvOTNjaGlpZXhvaDlwMnA4NGkxa3B1cHliN3lmazk1N2JmdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IBFvMzgB6fFmysKsmP/giphy.gif"
+          alt=""
+          class="w-32 h-32 object-contain select-none pointer-events-none"
+          draggable={false}
+        />
         <h1 class="text-2xl lg:text-3xl font-black text-zinc-200">
           Dashboard
         </h1>
