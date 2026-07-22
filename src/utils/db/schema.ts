@@ -1,4 +1,4 @@
-import { sql, type InferModel } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import {
   integer,
   sqliteTable,

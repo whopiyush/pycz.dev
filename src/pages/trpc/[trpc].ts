@@ -3,7 +3,7 @@ import type { APIRoute } from "astro";
 import { createContext } from "../../utils/server/context";
 import { appRouter } from "../../utils/server/router";
 
-export const all: APIRoute = ({ params, request }) => {
+export const ALL: APIRoute = ({ params, request }) => {
   return fetchRequestHandler({
     endpoint: "/trpc",
     req: request,
