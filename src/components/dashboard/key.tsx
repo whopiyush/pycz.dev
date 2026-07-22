@@ -2,7 +2,6 @@ import { useState } from "preact/hooks";
 
 interface Props {
   refreshState: () => void;
-  onClear: () => void;
 }
 
 export default function DashboardKey({ refreshState }: Props) {

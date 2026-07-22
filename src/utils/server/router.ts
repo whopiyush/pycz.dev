@@ -1,7 +1,7 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { nanoid } from "nanoid";
-import { createLink, deleteLink, listLinks, resolveLink, updateLink } from "../db";
+import { createLink, deleteLink, listLinks, updateLink } from "../db";
 import type { Context } from "./context";
 
 export const t = initTRPC.context<Context>().create();
@@ -16,11 +16,6 @@ const isAuthenticated = t.middleware(({ ctx, next }) => {
 export const protectedProcedure = t.procedure.use(isAuthenticated);
 
 export const appRouter = t.router({
-  // Public: resolves a key for redirect
-  resolve: t.procedure.input(z.string()).query(async ({ input }) => {
-    return resolveLink(input);
-  }),
-
   // List all links
   list: protectedProcedure
     .input(z.object({ search: z.string().optional() }))

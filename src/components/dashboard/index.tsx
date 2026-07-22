@@ -7,8 +7,6 @@ type View = "list" | "create";
 
 type Toast = { id: number; text: string; kind: "ok" | "err" };
 
-let nextId = 1;
-
 export default function DashboardPage() {
   const [isKeySet, setIsKeySet] = useState(false);
   const [links, setLinks] = useState<Link[]>([]);
@@ -18,16 +16,11 @@ export default function DashboardPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const [editKey, setEditKey] = useState("");
-  const [editUrl, setEditUrl] = useState("");
-  const [editDesc, setEditDesc] = useState("");
-
-  const [newKey, setNewKey] = useState("");
-  const [newUrl, setNewUrl] = useState("");
-  const [newDesc, setNewDesc] = useState("");
+  const [editForm, setEditForm] = useState({ key: "", url: "", desc: "" });
+  const [newForm, setNewForm] = useState({ key: "", url: "", desc: "" });
 
   const addToast = (text: string, kind: Toast["kind"] = "ok") => {
-    const id = nextId++;
+    const id = Date.now();
     setToasts((t) => [...t, { id, text, kind }]);
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 4000);
   };
@@ -35,8 +28,7 @@ export default function DashboardPage() {
   const loadLinks = async (s?: string) => {
     setLoading(true);
     try {
-      const client = createClient();
-      setLinks(await client.list.query({ search: s || undefined }));
+      setLinks(await createClient().list.query({ search: s }));
     } catch (e: unknown) {
       addToast(e instanceof Error ? e.message : "Failed to load links", "err");
     } finally {
@@ -54,18 +46,14 @@ export default function DashboardPage() {
 
   const onSubmitCreate = async (e: Event) => {
     e.preventDefault();
-    if (!newKey.trim() || !newUrl.trim()) return;
     try {
-      const client = createClient();
-      await client.create.mutate({
-        key: newKey.trim(),
-        url: newUrl.trim(),
-        description: newDesc || undefined,
+      await createClient().create.mutate({
+        key: newForm.key.trim(),
+        url: newForm.url.trim(),
+        description: newForm.desc || undefined,
       });
-      addToast(`Created /${newKey.trim()}`);
-      setNewKey("");
-      setNewUrl("");
-      setNewDesc("");
+      addToast(`Created /${newForm.key.trim()}`);
+      setNewForm({ key: "", url: "", desc: "" });
       setView("list");
       loadLinks(search);
     } catch (e: unknown) {
@@ -75,25 +63,17 @@ export default function DashboardPage() {
 
   const onStartEdit = (link: Link) => {
     setEditing(link.id);
-    setEditKey(link.key);
-    setEditUrl(link.url);
-    setEditDesc(link.description ?? "");
-  };
-
-  const onCancelEdit = () => {
-    setEditing(null);
+    setEditForm({ key: link.key, url: link.url, desc: link.description ?? "" });
   };
 
   const onSubmitEdit = async (e: Event, id: string) => {
     e.preventDefault();
-    if (!editKey.trim() || !editUrl.trim()) return;
     try {
-      const client = createClient();
-      await client.update.mutate({
+      await createClient().update.mutate({
         id,
-        key: editKey.trim(),
-        url: editUrl.trim(),
-        description: editDesc || undefined,
+        key: editForm.key.trim(),
+        url: editForm.url.trim(),
+        description: editForm.desc || undefined,
       });
       addToast("Link updated");
       setEditing(null);
@@ -105,8 +85,7 @@ export default function DashboardPage() {
 
   const onToggleEnabled = async (link: Link) => {
     try {
-      const client = createClient();
-      await client.update.mutate({ id: link.id, enabled: !link.enabled });
+      await createClient().update.mutate({ id: link.id, enabled: !link.enabled });
       addToast(link.enabled ? "Disabled" : "Enabled");
       loadLinks(search);
     } catch (e: unknown) {
@@ -117,8 +96,7 @@ export default function DashboardPage() {
   const onDelete = async (id: string) => {
     if (!window.confirm("Delete this link?")) return;
     try {
-      const client = createClient();
-      await client.delete.mutate({ id });
+      await createClient().delete.mutate({ id });
       addToast("Link deleted");
       loadLinks(search);
     } catch (e: unknown) {
@@ -130,12 +108,7 @@ export default function DashboardPage() {
     ts ? new Date(ts).toLocaleDateString() : null;
 
   if (!isKeySet) {
-    return (
-      <DashboardKey
-        refreshState={() => setIsKeySet(true)}
-        onClear={() => {}}
-      />
-    );
+    return <DashboardKey refreshState={() => setIsKeySet(true)} />;
   }
 
   return (
@@ -171,10 +144,7 @@ export default function DashboardPage() {
         />
         <div class="flex gap-2">
           <button
-            onClick={() => {
-              setView("create");
-              setEditing(null);
-            }}
+            onClick={() => { setView("create"); setEditing(null); }}
             class={`px-3 py-1.5 rounded text-sm border ${
               view === "create"
                 ? "border-lime-500/50 bg-lime-500/20 text-lime-300"
@@ -184,10 +154,7 @@ export default function DashboardPage() {
             + New
           </button>
           <button
-            onClick={() => {
-              setView("list");
-              setEditing(null);
-            }}
+            onClick={() => { setView("list"); setEditing(null); }}
             class={`px-3 py-1.5 rounded text-sm border ${
               view === "list"
                 ? "border-lime-500/50 bg-lime-500/20 text-lime-300"
@@ -197,10 +164,7 @@ export default function DashboardPage() {
             Links
           </button>
           <button
-            onClick={() => {
-              localStorage.removeItem("key");
-              setIsKeySet(false);
-            }}
+            onClick={() => { localStorage.removeItem("key"); setIsKeySet(false); }}
             class="px-3 py-1.5 rounded text-sm border border-zinc-700 text-zinc-500 hover:text-zinc-300"
           >
             Logout
@@ -215,8 +179,8 @@ export default function DashboardPage() {
           <div class="flex gap-2 items-center">
             <span class="text-zinc-500 text-sm font-mono">pycz.dev/</span>
             <input
-              onInput={(e) => setNewKey(e.currentTarget.value)}
-              value={newKey}
+              onInput={(e) => setNewForm((f) => ({ ...f, key: e.currentTarget.value }))}
+              value={newForm.key}
               required
               placeholder="my-link"
               class="flex-1 px-3 py-1.5 rounded border border-zinc-700 bg-zinc-900 text-zinc-300 outline-none focus:border-zinc-500 text-sm"
@@ -224,23 +188,23 @@ export default function DashboardPage() {
             />
           </div>
           <input
-            onInput={(e) => setNewUrl(e.currentTarget.value)}
-            value={newUrl}
+            onInput={(e) => setNewForm((f) => ({ ...f, url: e.currentTarget.value }))}
+            value={newForm.url}
             required
             placeholder="https://example.com"
             class="px-3 py-1.5 rounded border border-zinc-700 bg-zinc-900 text-zinc-300 outline-none focus:border-zinc-500 text-sm"
             type="url"
           />
           <input
-            onInput={(e) => setNewDesc(e.currentTarget.value)}
-            value={newDesc}
+            onInput={(e) => setNewForm((f) => ({ ...f, desc: e.currentTarget.value }))}
+            value={newForm.desc}
             placeholder="Description (optional)"
             class="px-3 py-1.5 rounded border border-zinc-700 bg-zinc-900 text-zinc-300 outline-none focus:border-zinc-500 text-sm"
             type="text"
           />
           <button
             type="submit"
-            disabled={!newKey.trim() || !newUrl.trim()}
+            disabled={!newForm.key.trim() || !newForm.url.trim()}
             class="px-4 py-1.5 rounded bg-lime-500/40 hover:bg-lime-500/50 disabled:opacity-40 disabled:cursor-not-allowed text-sm self-start"
           >
             Create
@@ -254,9 +218,7 @@ export default function DashboardPage() {
           {loading && <p class="text-zinc-500 text-sm font-mono">Loading…</p>}
           {!loading && links.length === 0 && (
             <p class="text-zinc-500 text-sm font-mono">
-              {search
-                ? "No links match that search."
-                : "No links yet. Create one!"}
+              {search ? "No links match that search." : "No links yet. Create one!"}
             </p>
           )}
           {!loading && links.length > 0 && (
@@ -265,12 +227,8 @@ export default function DashboardPage() {
                 <tr class="text-zinc-500 border-b border-zinc-800 text-left">
                   <th class="py-2 pr-4 font-normal w-8">#</th>
                   <th class="py-2 pr-4 font-normal">Key</th>
-                  <th class="py-2 pr-4 font-normal hidden md:table-cell">
-                    URL
-                  </th>
-                  <th class="py-2 pr-4 font-normal w-16 text-right">
-                    Clicks
-                  </th>
+                  <th class="py-2 pr-4 font-normal hidden md:table-cell">URL</th>
+                  <th class="py-2 pr-4 font-normal w-16 text-right">Clicks</th>
                   <th class="py-2 font-normal w-40 text-right">Actions</th>
                 </tr>
               </thead>
@@ -281,23 +239,21 @@ export default function DashboardPage() {
                       <td class="py-2 pr-4 text-zinc-600" />
                       <td class="py-2 pr-4">
                         <input
-                          onInput={(e) => setEditKey(e.currentTarget.value)}
-                          value={editKey}
+                          onInput={(e) => setEditForm((f) => ({ ...f, key: e.currentTarget.value }))}
+                          value={editForm.key}
                           class="w-full px-2 py-1 rounded border border-zinc-700 bg-zinc-800 text-zinc-300 outline-none focus:border-zinc-500 text-xs"
                           type="text"
                         />
                       </td>
                       <td class="py-2 pr-4 hidden md:table-cell">
                         <input
-                          onInput={(e) => setEditUrl(e.currentTarget.value)}
-                          value={editUrl}
+                          onInput={(e) => setEditForm((f) => ({ ...f, url: e.currentTarget.value }))}
+                          value={editForm.url}
                           class="w-full px-2 py-1 rounded border border-zinc-700 bg-zinc-800 text-zinc-300 outline-none focus:border-zinc-500 text-xs"
                           type="url"
                         />
                       </td>
-                      <td class="py-2 pr-4 text-zinc-600 text-right text-xs">
-                        {link.clicks}
-                      </td>
+                      <td class="py-2 pr-4 text-zinc-600 text-right text-xs">{link.clicks}</td>
                       <td class="py-2 text-right">
                         <div class="flex gap-1 justify-end text-xs">
                           <button
@@ -307,7 +263,7 @@ export default function DashboardPage() {
                             Save
                           </button>
                           <button
-                            onClick={onCancelEdit}
+                            onClick={() => setEditing(null)}
                             class="px-2 py-1 rounded bg-zinc-700 text-zinc-400 hover:text-zinc-200"
                           >
                             Cancel
@@ -341,9 +297,7 @@ export default function DashboardPage() {
                       <td class="py-2 pr-4 text-zinc-500 hidden md:table-cell truncate max-w-[300px]">
                         {link.url}
                       </td>
-                      <td class="py-2 pr-4 text-zinc-500 text-right">
-                        {link.clicks}
-                      </td>
+                      <td class="py-2 pr-4 text-zinc-500 text-right">{link.clicks}</td>
                       <td class="py-2 text-right">
                         <div class="flex gap-1 justify-end text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                           <button

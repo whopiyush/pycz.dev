@@ -13,6 +13,7 @@ export async function resolveLink(key: string): Promise<string | null> {
   const link = rows[0];
   if (!link) return null;
 
+  // ponytail: fire-and-forget, no await — redirect latency matters more than counting
   db.update(links).set({ clicks: link.clicks + 1 }).where(eq(links.id, link.id));
   return link.url;
 }
