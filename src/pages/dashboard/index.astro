@@ -1,15 +1,8 @@
 ---
-import { z } from "zod";
 import DashboardPage from "../../components/dashboard";
 import Layout from "../../layouts/Layout.astro";
-
-const validationSchema = z.object({
-  key: z.string().min(1).max(200),
-  url: z.string().url(),
-  description: z.string().optional(),
-});
 ---
 
-<Layout title="Piyush's Custom Slugs">
+<Layout title="Piyush's Custom Slugs" wide>
   <DashboardPage client:only />
 </Layout>

@@ -1,55 +1,68 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { nanoid } from "nanoid";
-import { createLink } from "../db";
+import { createLink, deleteLink, listLinks, updateLink } from "../db";
 import type { Context } from "./context";
 
 export const t = initTRPC.context<Context>().create();
 
 const isAuthenticated = t.middleware(({ ctx, next }) => {
   if (!ctx.isAuthenticated) {
-    throw new TRPCError({
-      code: "UNAUTHORIZED",
-      message: "Missing x-dashboard-key header",
-    });
+    throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-
   return next();
 });
 
-export const protectedRouter = t.procedure.use(isAuthenticated);
+export const protectedProcedure = t.procedure.use(isAuthenticated);
 
 export const appRouter = t.router({
-  getLinkByKey: t.procedure.input(z.string()).query(({ input }) => {
-    return `https://pycz.dev`;
-  }),
-  createLink: protectedRouter
+  // List all links
+  list: protectedProcedure
+    .input(z.object({ search: z.string().optional() }))
+    .query(async ({ input }) => {
+      return listLinks(input.search);
+    }),
+
+  // Create a link
+  create: protectedProcedure
     .input(
       z.object({
-        key: z.string().min(1),
-        link: z.string().url(),
+        key: z.string().min(1).max(200),
+        url: z.string().url(),
         description: z.string().optional(),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
-      const id = nanoid()
-      const generatedLink = await createLink({
-        id,
+      return createLink({
+        id: nanoid(12),
         key: input.key,
-        url: input.link,
-        description: input.description || null,
-        parent: "none",
+        url: input.url,
+        description: input.description ?? null,
         enabled: true,
       });
+    }),
 
-      if (!generatedLink) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to create link",
-        });
-      }
+  // Update a link
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        key: z.string().min(1).max(200).optional(),
+        url: z.string().url().optional(),
+        description: z.string().optional(),
+        enabled: z.boolean().optional(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { id, ...data } = input;
+      return updateLink(id, data);
+    }),
 
-      return id;
+  // Delete a link
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      await deleteLink(input.id);
     }),
 });
 

@@ -1,11 +1,11 @@
 ---
 import Navbar from "../components/Navbar.astro";
-
 export interface Props {
   title: string;
+  wide?: boolean;
 }
 
-const { title } = Astro.props;
+const { title, wide = false } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -33,7 +33,7 @@ const { title } = Astro.props;
     <nav class="flex-shrink-0">
       <Navbar />
     </nav>
-    <main class="flex-1 p-4 max-w-3xl mx-auto">
+    <main class={`flex-1 p-4 mx-auto ${wide ? 'max-w-6xl w-full' : 'max-w-3xl'}`}>
       <slot />
     </main>
   </body>
