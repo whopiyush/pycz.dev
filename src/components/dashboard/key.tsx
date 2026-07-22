@@ -21,11 +21,6 @@ export default function DashboardKey({ refreshState }: Props) {
         <h1 class="text-2xl lg:text-3xl font-black text-zinc-200">
           Dashboard
         </h1>
-        <p class="text-zinc-500 text-sm font-mono max-w-md">
-          Enter your dashboard key to manage short links. This key is set via
-          the <code class="text-zinc-400">DASHBOARD_KEY</code> environment
-          variable on the server.
-        </p>
       </div>
 
       <form
